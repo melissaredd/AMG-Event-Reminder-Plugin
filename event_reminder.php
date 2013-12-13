@@ -104,31 +104,10 @@ if($_POST['vip_reservation_form'] == 'yes'){
 
 // Check if event is approaching in two days
 function check_days() {
+	global $wpdb;
+	
 	$amgreminders = $pd->get_amgreminders();
-	$eventdata = read_data();
-	foreach( $amgreminders as $amgreminder ){ {
-		if ($blogdata[$buser->ID] != 0) {
-			$lastpost = strtotime($buser->post_date);
-			$timeinterval = ($blogdata[$buser->ID])*86400;
-			$timesincelast = time() - $lastpost;
-			if ($timesincelast >= $timeinterval) {
-				EventReminder;	
-			}
-		}
-	}
-}
-class EventReminder{
-
-	public function get_events( $date = '', $form_status = 'registered' ) {
-		global $wpdb;
-		
-		if( $date == '' ){
-			$date = current_time( 'mysql',0 );
-		}
-		
-		if( $form_status == 'registered' );
-		
-		$amgreminders = $wpdb->get_results( $wpdb->prepare("
+	$eventdata = $amgreminders = $wpdb->get_results( $wpdb->prepare("
 			SELECT *
 			FROM {$wpdb->vip_registration_event_reminder}
 			WHERE event_date < '{$date}'
@@ -136,54 +115,44 @@ class EventReminder{
 				AND post_status = '{$status}'
 			ORDER BY event_date ASC
 		") );
-		
-		return $amgreminders;
+	return $amgreminders;
+	
+	foreach( $amgreminders as $amgreminder ){ {
+		if( $form_status == 'registered' ){
+			$eventdate = strtotime($buser->post_date);
+			$timeinterval = ($blogdata[$buser->ID])*86400;
+			$timesincelast = time() - $lastpost;
+			if ($timesincelast >= $timeinterval) {
+				send_ereminders;	}
+			}
+		}
 	}
-	
-	//get_ereminders
-	
-	
-	/**
-	 * Send Ereminders
-	 */
-	public static function send_amgreminders(){
+}
+
+	function send_ereminders(){
 		
-	//get ereminders
-		$pd = new EventReminder;
-		$amgreminders = $pd->get_amgreminders();
-		
+		//get ereminders
+		$pd = new PDER;
+		$ereminders = $pd->get_ereminders();
 		
 		foreach( $amgreminders as $amgreminder ){
 		
-			$subject = '[Reminder] ' . $ereminder->event_name;
-			$to = $ereminder->email;
-			
-			//use the email of the user who scheduled the reminder
-			$author = get_userdata( $ereminder->post_author );
-			$author_email = $author->user_email;
-			$headers = 	"From: Email Reminder <{$author_email}>\r\n" .
+			$subject = '[Reminder] ' . $amgreminder->$event_name;
+			$to = $ereminder->$email;
+			$headers = 	"From: AngelMG <{$email}>\r\n" .
 						"Content-Type: text/html;\r\n";
 			
-			$creation_date = date( 'l, F j, Y', strtotime( $ereminder->post_date ) );
-			$message = "<p>This message is a reminder created on {$creation_date}</p>\n";
-			$message .= "<p><strong>REMINDER:</strong><br />\n";
-			$message .= $ereminder->post_content . "</p><br />\n";
-			$message .= "<p>{$credits}</p>";
-			
+			$creation_date = date( 'l, F j, Y', strtotime( $amgreminder->event_date ) );
+			$message = "<p>This message is a reminder that you are scheduled to attent {$event_name} on {$event_date} </p>\n";
+						
 			$email_result = wp_mail( $to, $subject, $message, $headers );
 			//$email_result = wp_mail( 'ryannmicua@gmail.com', 'Test Reminder', 'message', 'From: Email Reminder <ryannmicua@gmail.com>' );
 			
 			
 			if( $email_result ){//wp_mail() processed the request successfully
 				//set post to 'publish' or delete the post
-				$args = array( 'ID' => $ereminder->ID, 'post_status' => 'publish', 'post_date' => $ereminder->post_date, 'post_date_gmt' => $ereminder->post_date_gmt, 'post_modified' => current_time('mysql',0), 'post_modified_gmt' => current_time('mysql',1) );
 				
-				wp_update_post( $args );
-				//wp_delete_post( $ereminder->ID );
 			}
 			
 		}
 	}
-	
-}
-   ?>
