@@ -7,15 +7,15 @@ if($_POST['vip_reservation_form'] == 'yes'){
     		global $wpdb;
 
 
-                    $entry["first_name"] = '$first_name';
-					  $entry["last_name"] = '$last_name'; 
-                    $entry["phone"] = '$phone';
-                    $entry["email"] = '$email';
-                    $entry["guest_number"] = '$guest_number';
-					  $entry["event_name"] = '$event_name';
-					  $entry["event_date"] = '$event_date';
+                    $entry["1"] = '$first_name';
+					  $entry["2"] = '$last_name'; 
+                    $entry["3"] = '$phone';
+                    $entry["4"] = '$email';
+                    $entry["5"] = '$guest_number';
+					  $entry["6"] = '$event_name';
+					  $entry["7"] = '$event_date';
 					  
-   $SQL = "INSERT INTO vip_registration_event_reminder ( first_name, last_name, phone, email, guest_number, event_name, event_date) VALUES ( '$first_name', '$last_name' ,'$phone', '$email', '$guest_number', '$event_name','$event_date')";
+   $SQL = "INSERT INTO vip_registration_event_reminder ( 1, 2, 3, 4, 5, 6, 7) VALUES ( '$first_name', '$last_name' ,'$phone', '$email', '$guest_number', '$event_name','$event_date')";
    $wpdb->query($SQL);
    }
 }
