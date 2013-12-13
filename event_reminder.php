@@ -110,7 +110,7 @@ function check_days() {
 	$eventdata = $amgreminders = $wpdb->get_results( $wpdb->prepare("
 			SELECT *
 			FROM {$wpdb->vip_registration_event_reminder}
-			WHERE event_date < '{$date}'
+			WHERE event_date = '{$eventdate}'
 				AND form_type = 'guestlist'
 				AND post_status = '{$status}'
 			ORDER BY event_date ASC
@@ -119,10 +119,9 @@ function check_days() {
 	
 	foreach( $amgreminders as $amgreminder ){ {
 		if( $form_status == 'registered' ){
-			$eventdate = strtotime($buser->post_date);
-			$timeinterval = ($blogdata[$buser->ID])*86400;
-			$timesincelast = time() - $lastpost;
-			if ($timesincelast >= $timeinterval) {
+			$eventreminderdate = date( 'm.d.y' , strtotime($eventdate. ' - 2 days'));
+			$currentdate = date("m.d.y");
+			if ($currentdate >= $eventreminderdate) {
 				send_ereminders;	}
 			}
 		}
