@@ -40,18 +40,15 @@ register_activation_hook( __FILE__, 'amg_event_reminder_install' );
 add_action('aer_hook', 'check_days');
 function aer_activation() {
     $set_time = 1304431200; // 9:00AM EST
-    $file = ABSPATH . "/wp-content/plugins/amg_event_reminder/eventreminder.data";
+    $file = ABSPATH . "/wp-content/plugins/amg_event_reminder/event_reminder.php";
 	if (file_exists($file)) {
-	    $ed = read_data();
-	    wp_schedule_event($set_time, $ed['schedule'], 'aer_hook');
-	} else {
-	    wp_schedule_event($set_time, 'daily', 'aer_hook');
+	   wp_schedule_event($set_time, 'daily', 'aer_hook');
 	}
 }
 
 // Remove scheduled daily checks upon plugin deactivation
 register_deactivation_hook(__FILE__, 'amg_event_reminder_uninstall');
-function bur_deactivation() {
+function aer_deactivation() {
 	wp_clear_scheduled_hook('aer_hook');
 }
 		
